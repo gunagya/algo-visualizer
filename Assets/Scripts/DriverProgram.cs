@@ -6,18 +6,17 @@ public class DriverProgram : MonoBehaviour
 {
     public int size = 0;
     public GameObject toSpawn;
+    public AudioSource swapSound;
+    public AudioSource liftSound;
+    public AudioSource dropSound;
 
     Vector3[] mapLocations;
     GameObject[] array;
     float[] values;
     int stackCount = -1;
-
-    AudioSource swapSound;
     
     void Start()
     {
-        swapSound = GetComponent<AudioSource>();
-
         if (size>0)
         {
             mapLocations = new Vector3[size];
@@ -91,6 +90,8 @@ public class DriverProgram : MonoBehaviour
             Debug.Log("No script found");
         else
         {
+            if (liftSound && h==2f)
+                liftSound.Play();
             aScript.wayPointList = new Vector3[1];
             aScript.wayPointList[0] = lifted;
             aScript.speed = 4f;
@@ -105,6 +106,8 @@ public class DriverProgram : MonoBehaviour
             Debug.Log("No script found");
         else
         {
+            if (dropSound && array[index].transform.position.y==3f)
+                dropSound.Play();
             aScript.wayPointList = new Vector3[1];
             aScript.wayPointList[0] = dropped;
             aScript.speed = 4f;
@@ -122,7 +125,8 @@ public class DriverProgram : MonoBehaviour
         values[i] = values[j];
         values[j] = temp_val;
 
-        swapSound.Play(0);
+        if (swapSound)
+            swapSound.Play();
 
         ElementBehaviour iScript = array[i].GetComponent<ElementBehaviour>();
         if (iScript == null)
